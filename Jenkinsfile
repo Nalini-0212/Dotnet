@@ -7,7 +7,6 @@ pipeline {
 
     environment {
         SCANNER_HOME = tool('sonar-scanner')
-        NVD_API_KEY = credentials('nvd-api-key')
     }
 
     stages {
@@ -53,21 +52,42 @@ pipeline {
 
         stage('OWASP Dependency Check') {
             steps {
-                dependencyCheck(
-                    additionalArguments: "--scan ./ --format XML --nvdApiKey ${NVD_API_KEY}",
-                    odcInstallation: 'DP-Check'
-                )
 
-                dependencyCheckPublisher(
-                    pattern: '**/dependency-check-report.xml'
-                )
+                withCredentials([
+                    string(credentialsId: 'nvd-api-key', variable: 'APIKEY')
+                ]) {
+
+                    dependencyCheck(
+                        odcInstallation: 'DP-Check',
+                        additionalArguments: """
+                            --scan .
+                            --format XML
+                            --nvdApiKey $APIKEY
+                        """
+                    )
+
+                    dependencyCheckPublisher(
+                        pattern: '**/dependency-check-report.xml'
+                    )
+                }
             }
         }
     }
 
     post {
         always {
-            archiveArtifacts artifacts: 'trivy-fs_report.txt', allowEmptyArchive: true
+            archiveArtifacts(
+                artifacts: 'trivy-fs_report.txt',
+                allowEmptyArchive: true
+            )
+        }
+
+        success {
+            echo 'Pipeline completed successfully.'
+        }
+
+        failure {
+            echo 'Pipeline failed. Check stage logs.'
         }
     }
 }
