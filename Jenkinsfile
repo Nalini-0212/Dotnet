@@ -7,6 +7,7 @@ pipeline {
 
     environment {
         SCANNER_HOME = tool('sonar-scanner')
+        NVD_API_KEY = credentials('nvd-api-key')
     }
 
     stages {
@@ -53,7 +54,7 @@ pipeline {
         stage('OWASP Dependency Check') {
             steps {
                 dependencyCheck(
-                    additionalArguments: '--scan ./ --format XML',
+                    additionalArguments: "--scan ./ --format XML --nvdApiKey ${NVD_API_KEY}",
                     odcInstallation: 'DP-Check'
                 )
 
@@ -70,4 +71,3 @@ pipeline {
         }
     }
 }
-
