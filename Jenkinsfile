@@ -154,7 +154,7 @@ pipeline {
                     echo "========== UPDATE DEPLOYMENT IMAGE =========="
 
                     sh """
-                    kubectl set image deployment/dotnet-app \
+                    kubectl set image deployment/dotnet-app-deployment \
                     dotnet-app=${IMAGE}
                     """
                 }
