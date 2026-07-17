@@ -83,7 +83,7 @@ pipeline {
                 ]) {
                     sh '''
                     echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-                    docker push naliniselv/donet:latest
+                    docker push ${IMAGE}
                     docker logout
                     '''
                 }
