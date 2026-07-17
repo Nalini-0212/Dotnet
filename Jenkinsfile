@@ -199,7 +199,6 @@ pipeline {
 
                     kubectl get svc dotnet-app-service -o wide
 
-                    kubectl describe dotnet-app-service
                     """
                 }
             }
