@@ -171,7 +171,7 @@ pipeline {
                     echo "========== VERIFY DEPLOYMENT =========="
 
                     sh """
-                    kubectl rollout status deployment/dotnet-app --timeout=5m
+                    kubectl rollout status deployment/dotnet-app-deployment --timeout=5m
 
                     kubectl get deployments
 
@@ -179,7 +179,7 @@ pipeline {
 
                     kubectl get svc
 
-                    kubectl describe deployment dotnet-app
+                    kubectl describe deployment dotnet-app-deployment
                     """
                 }
             }
@@ -197,9 +197,9 @@ pipeline {
                     sh """
                     sleep 60
 
-                    kubectl get svc dotnet-service -o wide
+                    kubectl get svc dotnet-app-service -o wide
 
-                    kubectl describe svc dotnet-service
+                    kubectl describe dotnet-app-service
                     """
                 }
             }
