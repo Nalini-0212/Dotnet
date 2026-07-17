@@ -59,7 +59,7 @@ pipeline {
         stage('Docker Build & Tag') {
             steps {
                 sh """
-                docker build -t ${IMAGE} .
+                docker build -t ${IMAGE} -f build/Dockerfile .
                 """
             }
         }
